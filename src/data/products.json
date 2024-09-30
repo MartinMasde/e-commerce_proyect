@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "title": "iphone 14 pro",
+    "description": "Product of apple",
+    "code": "22334455",
+    "price": "1480",
+    "stock": "100",
+    "category": "Smartphone"
+  },
+  {
+    "id": 2,
+    "title": "iphone 15 pro",
+    "description": "Last product of apple",
+    "code": "22334455",
+    "price": "1450",
+    "status": true,
+    "stock": "100",
+    "category": "Smartphone",
+    "thumbnail": ""
+  },
+  {
+    "id": 3,
+    "title": "iphone 16 pro",
+    "description": "Last product of apple",
+    "code": "22334455",
+    "price": "1650",
+    "status": true,
+    "stock": "100",
+    "category": "Smartphone",
+    "thumbnail": ""
+  },
+  {
+    "id": 4,
+    "title": "iphone 16",
+    "description": "Last product of apple",
+    "code": "22334455",
+    "price": "1480",
+    "stock": "100",
+    "category": "Smartphone"
+  }
+]
