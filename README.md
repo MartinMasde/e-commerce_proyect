@@ -2,7 +2,7 @@
 
 ### Install the dependencies
 ```
-npm install express
+npm install 
 ```
 
 ### In order to run the proyect
