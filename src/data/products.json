@@ -32,11 +32,11 @@
   },
   {
     "id": 4,
-    "title": "iphone 16",
+    "title": "Macbook 14 pro",
     "description": "Last product of apple",
     "code": "22334455",
-    "price": "1480",
-    "stock": "100",
-    "category": "Smartphone"
+    "price": "1890",
+    "stock": "46",
+    "category": "Notebook"
   }
 ]
