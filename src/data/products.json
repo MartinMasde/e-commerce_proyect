@@ -1,14 +1,5 @@
 [
   {
-    "id": 1,
-    "title": "iphone 14 pro",
-    "description": "Product of apple",
-    "code": "22334455",
-    "price": "1480",
-    "stock": "100",
-    "category": "Smartphone"
-  },
-  {
     "id": 2,
     "title": "iphone 15 pro",
     "description": "Last product of apple",
@@ -38,5 +29,27 @@
     "price": "1890",
     "stock": "46",
     "category": "Notebook"
+  },
+  {
+    "id": 5,
+    "title": "Samsung S24",
+    "description": "Last product of Samsung",
+    "code": "1234",
+    "price": "1000",
+    "status": true,
+    "stock": "50",
+    "category": "Smartphone",
+    "thumbnail": ""
+  },
+  {
+    "id": 5,
+    "title": "Samsung S24 Plus",
+    "description": "Last product of Samsung",
+    "code": "1234",
+    "price": "1250",
+    "status": true,
+    "stock": "20",
+    "category": "Smartphone",
+    "thumbnail": ""
   }
 ]

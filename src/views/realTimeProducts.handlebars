@@ -1,0 +1,147 @@
+{{!-- <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+
+    <div class="container mt-5">
+        <h1 class="text-center">Productos</h1>
+
+        <h2 class="text-center mt-4">Crear Producto</h2>
+        <form id="productForm" class="mt-4">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input type="text" class="form-control" id="titulo" placeholder="Título" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <input type="text" class="form-control" id="descripcion" placeholder="Descripción" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="codigo" class="form-label">Código</label>
+                    <input type="text" class="form-control" id="codigo" placeholder="Código" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="precio" class="form-label">Precio</label>
+                    <input type="number" class="form-control" id="precio" placeholder="Precio" required>
+                </div>
+                <div class="col-md-4">
+                    <label for="stock" class="form-label">Stock</label>
+                    <input type="number" class="form-control" id="stock" placeholder="Stock" required>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="categoria" class="form-label">Categoría</label>
+                <input type="text" class="form-control" id="categoria" placeholder="Categoría" required>
+            </div>
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Crear</button>
+            </div>
+        </form>
+
+        <div id="productList" class="mt-5 row"></div>
+    </div>
+
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+
+        const productForm = document.getElementById('productForm');
+        const productList = document.getElementById('productList');
+
+        productForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Obtener los valores del formulario
+            const titulo = document.getElementById('titulo').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const codigo = document.getElementById('codigo').value;
+            const precio = document.getElementById('precio').value;
+            const stock = document.getElementById('stock').value;
+            const categoria = document.getElementById('categoria').value;
+
+            // Crear un nuevo producto en la lista
+            const productCard = document.createElement('div');
+            productCard.classList.add('col-md-4', 'mb-4');
+            productCard.innerHTML = `
+                <div class="card bg-secondary text-light">
+                    <div class="card-body">
+                        <h5 class="card-title">${titulo}</h5>
+                        <p class="card-text"><strong>Categoría:</strong> ${categoria}</p>
+                        <p class="card-text"><strong>Descripción:</strong> ${descripcion}</p>
+                        <p class="card-text"><strong>Precio:</strong> $${precio}</p>
+                        <p class="card-text"><strong>Stock:</strong> ${stock}</p>
+                        <button class="btn btn-danger" onclick="this.closest('.col-md-4').remove()">Eliminar</button>
+                    </div>
+                </div>
+            `;
+
+            // Agregar el producto a la lista
+            productList.appendChild(productCard);
+
+            // Limpiar el formulario
+            productForm.reset();
+        });
+    </script>
+
+</body>
+</html> --}}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos en Tiempo Real</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+    <div class="container mt-5">
+        <h1 class="text-center">Productos en Tiempo Real</h1>
+        <div id="productList" class="row mt-5"></div>
+    </div>
+
+    <!-- Socket.io script -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="module">
+        const productList = document.getElementById('productList');
+        const socket = io(); // Conectar al servidor Socket.io
+
+        // Escuchar evento de actualización de productos
+        socket.on('updateProducts', (products) => {
+            productList.innerHTML = ''; // Limpiar lista actual
+
+            // Recorrer la lista de productos y agregar cada uno a la vista
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.classList.add('col-md-4', 'mb-4');
+                productCard.innerHTML = `
+                    <div class="card bg-secondary text-light">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text"><strong>Categoría:</strong> ${product.category}</p>
+                            <p class="card-text"><strong>Descripción:</strong> ${product.description}</p>
+                            <p class="card-text"><strong>Precio:</strong> $${product.price}</p>
+                            <p class="card-text"><strong>Stock:</strong> ${product.stock}</p>
+                        </div>
+                    </div>
+                `;
+                productList.appendChild(productCard);
+            });
+        });
+    </script>
+</body>
+</html>

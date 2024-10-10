@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ProductManager } from '../managers/ProductManager.js';
+import { broadcastProductsUpdate } from '../app.js'; // Importamos la función de broadcast
 
 const router = Router();
 
@@ -38,7 +39,7 @@ router.get('/:pid', async (req, res) => {
 });
 
 // POST /api/products: Crea un nuevo producto
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     const { title, description, code, price, stock, category, thumbnail = [] } = req.body;
 
     // Validamos que los datos requeridos estén presentes
@@ -46,7 +47,7 @@ router.post('/', (req, res) => {
         return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
 
-    const newProduct = productManager.addProduct({
+    const newProduct = await productManager.addProduct({
         title,
         description,
         code,
@@ -56,6 +57,8 @@ router.post('/', (req, res) => {
         category,
         thumbnail
     });
+    // Emitir actualización a los clientes conectados al agregar un producto
+    broadcastProductsUpdate();
     res.status(201).json({ message: 'Producto agregado correctamente', newProduct });
 });
 
@@ -101,6 +104,8 @@ router.delete("/:pid", async (req, res) => {
 
   try {
     const deletedProduct = await productManager.deleteProduct(pid);
+    // Emitir actualización a los clientes conectados al eliminar un producto
+    broadcastProductsUpdate(); 
     res.json({
       message: `Producto con id ${pid} eliminado correctamente`,
       product: deletedProduct,
