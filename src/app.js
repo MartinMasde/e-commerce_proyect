@@ -21,10 +21,6 @@ const httpServer = app.listen(config.PORT, () => {
   console.log(`Server is running on port ${config.PORT}`);
 });
 
-// // Socket.io initialization
-// const socketServer = initSocket(httpServer);
-// app.set("socketServer", socketServer);
-
 // Inicialización de Socket.io
 const { io, broadcastProductsUpdate } = initSocket(httpServer);
 app.set("socketServer", io);

@@ -2,7 +2,7 @@ import { Router } from "express";
 
 const router = Router();
 
-// GET /products - Retorna los productos en la vista home
+// GET /products - Retorna los productos en la vista home de forma estática
 router.get('/', async (req, res) => {
     try {
         const response = await fetch('http://localhost:8080/api/products');
@@ -18,7 +18,6 @@ router.get('/', async (req, res) => {
 router.get('/realTimeProducts', (req, res) => {
     const data = {}
     res.status(200).render('realTimeProducts', data);
-    // res.status(200).render('realTimeProducts');
-} );
+});
 
 export default router;

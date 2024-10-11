@@ -23,15 +23,6 @@
   },
   {
     "id": 4,
-    "title": "Macbook 14 pro",
-    "description": "Last product of apple",
-    "code": "22334455",
-    "price": "1890",
-    "stock": "46",
-    "category": "Notebook"
-  },
-  {
-    "id": 4,
     "title": "Xiaomi 14pro",
     "description": "Last product of Xiaomi",
     "code": "4321",
@@ -39,6 +30,17 @@
     "status": true,
     "stock": "30",
     "category": "Smartphone",
+    "thumbnail": ""
+  },
+  {
+    "id": 5,
+    "title": "LG 65 LED",
+    "description": "FULL HD TV",
+    "code": "431",
+    "price": "1100",
+    "status": true,
+    "stock": "10",
+    "category": "TV",
     "thumbnail": ""
   }
 ]

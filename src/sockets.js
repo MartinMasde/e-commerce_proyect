@@ -5,7 +5,7 @@ const initSocket = (httpServer) => {
     const io = new Server(httpServer);
     console.log('Socket.io initialized');
 
-    // Inicializamos el ProductManager
+    // Inicialización del manager de productos
     const productManager = new ProductManager(); 
     productManager.init();
     
@@ -22,7 +22,7 @@ const initSocket = (httpServer) => {
         });
     });
 
-    // Función para actualizar los productos en tiempo real
+    // Función para actualizar los productos en tiempo real la uso en el router de productos para emitir la actualización
     const broadcastProductsUpdate = async () => {
         const products = await productManager.getProducts();
         // Emitir actualización a todos los clientes conectados

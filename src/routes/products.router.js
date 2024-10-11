@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { ProductManager } from '../managers/ProductManager.js';
-import { broadcastProductsUpdate } from '../app.js'; // Importamos la función de broadcast
+import { broadcastProductsUpdate } from '../app.js'; // Importamos la función de broadcast para emitir actualizaciones
 
 const router = Router();
 
