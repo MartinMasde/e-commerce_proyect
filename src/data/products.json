@@ -31,24 +31,13 @@
     "category": "Notebook"
   },
   {
-    "id": 5,
-    "title": "Samsung S24",
-    "description": "Last product of Samsung",
-    "code": "1234",
-    "price": "1000",
+    "id": 4,
+    "title": "Xiaomi 14pro",
+    "description": "Last product of Xiaomi",
+    "code": "4321",
+    "price": "1229",
     "status": true,
-    "stock": "50",
-    "category": "Smartphone",
-    "thumbnail": ""
-  },
-  {
-    "id": 5,
-    "title": "Samsung S24 Plus",
-    "description": "Last product of Samsung",
-    "code": "1234",
-    "price": "1250",
-    "status": true,
-    "stock": "20",
+    "stock": "30",
     "category": "Smartphone",
     "thumbnail": ""
   }

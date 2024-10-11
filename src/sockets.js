@@ -8,7 +8,8 @@ const initSocket = (httpServer) => {
     // Inicializamos el ProductManager
     const productManager = new ProductManager(); 
     productManager.init();
-
+    
+    // Evento de conexión de un cliente al socket server
     io.on('connection', async (cliente) => {
         console.log(`Client connected, id ${cliente.id}`);
 
