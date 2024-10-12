@@ -44,8 +44,9 @@ export class ProductManager {
     // Metodo para agregar un nuevo producto
     async addProduct(product) {
         const products = await this.#readProductsFile();
+        const highestId = products.length > 0 ? Math.max(...products.map(p => p.id)) : 0;
         const newProduct = {
-            id: products.length + 1,
+            id: highestId + 1,
             ...product
         };
         products.push(newProduct);

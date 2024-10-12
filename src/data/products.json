@@ -42,5 +42,27 @@
     "stock": "10",
     "category": "TV",
     "thumbnail": ""
+  },
+  {
+    "id": 6,
+    "title": "LG 65' OLED",
+    "description": "FULL HD TV",
+    "code": "444",
+    "price": "1300",
+    "status": true,
+    "stock": "10",
+    "category": "TV",
+    "thumbnail": ""
+  },
+  {
+    "id": 7,
+    "title": "LG 55' OLED",
+    "description": "FULL HD TV",
+    "code": "443",
+    "price": "1200",
+    "status": true,
+    "stock": "10",
+    "category": "TV",
+    "thumbnail": ""
   }
 ]
