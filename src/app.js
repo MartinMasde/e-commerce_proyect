@@ -1,6 +1,7 @@
 import express from "express";
 import handlebars from "express-handlebars";
 import initSocket from "./sockets.js";
+import mongoose from "mongoose";
 
 import productsRouter from "./routes/products.router.js";
 import cartsRouter from "./routes/carts.router.js";
@@ -17,8 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Server initialization
-const httpServer = app.listen(config.PORT, () => {
-  console.log(`Server is running on port ${config.PORT}`);
+const httpServer = app.listen(config.PORT, async () => {
+  await mongoose.connect(config.MONGODB_URI);
+  console.log(`Server is running on port ${config.PORT} and connected to MongoDB`);
 });
 
 // Inicialización de Socket.io

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { CartManager } from '../managers/CartManager.js';
-import { ProductManager } from '../managers/ProductManager.js';
+import CartManager  from '../dao/managers/CartManager.js';
+import ProductManager from '../dao/managers/ProductManager.js';
 
 const router = Router();
 
@@ -9,7 +9,7 @@ const cartManager = new CartManager();
 const productManager = new ProductManager();
 
 // Inicializamos el manager de cart
-await cartManager.init();
+// await cartManager.init();
 
 // GET /api/carts/:cid - Retorna un carrito por ID
 router.get('/:cid', async (req, res) => {
