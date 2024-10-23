@@ -7,7 +7,7 @@ const router = Router();
 const controller = new ProductManager();
 
 // Instanciamos el manager de productos
-const productManager = new ProductManager();
+// const productManager = new ProductManager();
 
 // Inicializamos el manager de productos
 // await productManager.init();
@@ -41,25 +41,26 @@ router.post ('/', uploader.single('thumbnail'), async (req, res) => {
     }
 });
 
-router.put ('/:id', async (req, res) => {
-    const { id } = req.params;
+router.put ('/:pid', async (req, res) => {
+    const { pid } = req.params;
     const { title, description, code, price, stock, category, thumbnail = [] } = req.body;
-    const filter = { _id: id };
+    const filter = { _id: pid };
     const updated = { title, description, code, price, stock, category, thumbnail };
     const options = { new: true };
 
     const process = await controller.update(filter, updated, options);
 
     if (process) {
+        broadcastProductsUpdate();
         res.status(200).send({ error: null, data: process });
     } else {
         res.status(404).send({ error: 'Producto no encontrado', data: [] });
     }
 });
 
-router.delete ('/:id', async (req, res) => {
-    const { id } = req.params;
-    const filter = { _id: id };
+router.delete ('/:pid', async (req, res) => {
+    const { pid } = req.params;
+    const filter = { _id: pid };
     const options = { };
 
     const process = await controller.delete(filter, options);

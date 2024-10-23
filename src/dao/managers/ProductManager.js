@@ -94,7 +94,7 @@ class ProductManager {
         } catch (error) {
             return error.mesaage;
         }
-    };
+    }
 
     add = async (data) => {
         try {

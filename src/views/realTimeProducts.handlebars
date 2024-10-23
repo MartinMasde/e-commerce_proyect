@@ -19,6 +19,13 @@
             text-align: center;
             font-weight: bold;
         }
+        .btn-cart {
+            background-color: #28a745;
+            color: white;
+            width: 50%;
+            margin-top: 10px;
+            
+        }
     </style>
 </head>
 <body>
@@ -49,10 +56,20 @@
                             <p class="card-text"><strong>Descripción:</strong> ${product.description}</p>
                             <p class="card-text"><strong>Precio:</strong> $${product.price}</p>
                             <p class="card-text"><strong>Stock:</strong> ${product.stock}</p>
+                            <div class= "d-flex justify-content-center">
+                                <button class="btn btn-cart">Agregar al carrito</button>
+                            </div>
                         </div>
                     </div>
                 `;
                 productList.appendChild(productCard);
+
+                // Agregar evento al botón de "Agregar al carrito"
+                const addButton = productCard.querySelector('.btn-cart');
+                addButton.addEventListener('click', () => {
+                    alert('Producto agregado al carrito');
+                    // agregarAlCarrito(product);
+                });
             });
         });
     </script>

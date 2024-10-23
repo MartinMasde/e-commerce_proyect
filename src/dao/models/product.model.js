@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
+import config from "../../config.js";
 
 // Anulamos comportamiento de renombre por defecto de colecciones
 mongoose.pluralize(null);
 
 // Mismo nombre que en la base de datos
-const collection = 'products';
+const collection = config.PRODUCTS_COLLECTION;
 
 // Definimos el esquema de productos
 const productSchema = new mongoose.Schema({

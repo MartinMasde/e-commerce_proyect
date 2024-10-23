@@ -84,8 +84,25 @@ class CartManager {
         }
     }
 
-    add = async (cart) => {
+    add = async (data) => {
         try {
+            return await cartModel.create(data);
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    put = async (filter, updated, options) => {
+        try {
+            return await cartModel.findOneAndUpdate(filter, updated, options);
+        } catch (error) {
+            return error.message;
+        }
+    }
+
+    delete = async (filter, options) => {
+        try {
+            return await cartModel.findOneAndDelete(filter, options);
         } catch (error) {
             return error.message;
         }
