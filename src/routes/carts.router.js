@@ -66,13 +66,22 @@ const router = Router();
 const controller = new CartManager();
 const productManager = new ProductManager();
 
+// GET /api/carts - Retorna todos los carritos
+router.get ('/', async (req, res) => {
+    const process = await controller.get();
+
+    if (process) {
+        res.status(200).send({ error: null, data: process });
+    } else {
+        res.status(404).send({ error: 'Carritos no encontrados', data: [] });
+    }
+});
+
 // GET /api/carts/:cid - Retorna un carrito por ID
 router.get ('/:cid', async (req, res) => {
-    const { cid } = req.params.cid;
-    const filter = { _id: cid };
-    const options = { };
-
-    const process = await controller.get(filter, options);
+    const { cid } = req.params;
+   
+    const process = await controller.getOne(cid);
 
     if (process) {
         res.status(200).send({ error: null, data: process });

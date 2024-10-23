@@ -12,11 +12,13 @@ const auth = (req, res, next) => {
     next();
 }
 
+// GET /users -> devuelve todos los usuarios
 router.get('/', async (req, res) => {
     const data = await controller.get();
     res.status(200).send({ error: null, data: data });
 });
 
+// POST /users -> crea un usuario
 router.post('/', auth, uploader.single('thumbnail'), async (req, res) => {
     const { firstName, lastName, email, gender, password} = req.body;
 
@@ -41,6 +43,7 @@ router.post('/', auth, uploader.single('thumbnail'), async (req, res) => {
     }
 });
 
+// PUT /users/:id -> actualiza un usuario por id
 router.put('/:id', auth, async (req, res) => {
     const { id } = req.params;
     const { firstName, lastName, email, gender, password } = req.body;
@@ -57,6 +60,7 @@ router.put('/:id', auth, async (req, res) => {
     }
 });
 
+// DELETE /users/:id -> borra un usuario por id
 router.delete('/:id', auth, async (req, res) => {
     const { id } = req.params;
     const filter = { _id: id };

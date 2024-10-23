@@ -6,9 +6,9 @@ class UserController {
 
     get = async () => {
         try {
-            // return await userModel.find().lean();
-            const regex = /^C/i;
-            return await userModel.find({ lastName: { $regex: regex }}).explain('executionStats');
+            return await userModel.find().lean();
+            // const regex = /^C/i;
+            // return await userModel.find({ lastName: { $regex: regex }}).explain('executionStats');
         } catch (err) {
             return err.message;
         }

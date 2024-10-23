@@ -71,6 +71,8 @@
 // }
 
 import cartModel from '../models/cart.model.js';
+import userModel from '../models/user.model.js';
+
 
 class CartManager {
     constructor() {}
@@ -81,6 +83,16 @@ class CartManager {
         } catch (error) {
             return error.message;
 
+        }
+    }
+    // tengo que hacer el endpoint para que me devuelva el carrito de un usuario
+    getOne = async (id) => {
+        try {
+            return await cartModel.findById(id)
+            .populate({ path: 'user', model: 'userModel', select: 'firstName lastName email' })
+            .lean();
+        } catch (error) {
+            return error.message;
         }
     }
 
