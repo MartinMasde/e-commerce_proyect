@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import config from "../../config.js";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 // Anulamos comportamiento de renombre por defecto de colecciones
 mongoose.pluralize(null);
@@ -17,6 +18,9 @@ const productSchema = new mongoose.Schema({
     category: { type: String, required: true },
     thumbnail: { type: String, required: false }
 });
+
+// Agregamos paginado al modelo
+productSchema.plugin(mongoosePaginate);
 
 // Genero el modelo de productos
 const model = mongoose.model(collection, productSchema);

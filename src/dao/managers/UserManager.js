@@ -1,6 +1,5 @@
 import userModel from '../models/user.model.js';
 
-
 class UserController {
     constructor() {}
 

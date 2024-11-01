@@ -2,22 +2,41 @@ import { Router } from 'express';
 import  ProductManager  from '../dao/managers/ProductManager.js';
 import { broadcastProductsUpdate } from '../app.js'; // Importamos la función de broadcast para emitir actualizaciones
 import { uploader } from '../uploader.js';
+import productModel from '../dao/models/product.model.js';
 
 const router = Router();
 const controller = new ProductManager();
 
-// Instanciamos el manager de productos
-// const productManager = new ProductManager();
-
-// Inicializamos el manager de productos
-// await productManager.init();
-
-
+// GET /api/products: Retorna todos los productos
 router.get ('/', async (req, res) => {
     const data = await controller.get();
     res.status(200).send({ error: null, data: data });
 });
 
+// GET /api/products/stats: Retorna los productos según filtros, limit, page, sort y query
+router.get('/stats/', async (req, res) => {
+    const limit = Number.isNaN(parseInt(req.query.limit)) ? 10 : parseInt(req.query.limit);
+    const page = Number.isNaN(parseInt(req.query.page)) ? 1 : parseInt(req.query.page);
+    const sort = req.query.sort || 'asc'; // Usa 'asc' como valor predeterminado
+
+    // Configuramos el objeto `query` para filtrar según categoría o disponibilidad
+    let query = {};
+    if (req.query.category) {
+        query.category = req.query.category; // Filtra por categoría
+    } else if (req.query.availability) {
+        query.stock = req.query.availability === 'in-stock' ? { $gt: 0 } : 0; // Filtra por disponibilidad
+    }
+
+    try {
+        // Ejecutamos la consulta con los parámetros
+        const data = await controller.stats(limit, page, query, sort);
+        res.status(200).send({ error: null, data });
+    } catch (error) {
+        res.status(500).send({ error: error.message, data: [] });
+    }
+});
+
+// POST /api/products: Crea un nuevo producto
 router.post ('/', uploader.single('thumbnail'), async (req, res) => {
     const { title, description, code, price, stock, category, thumbnail = [] } = req.body;
 
@@ -41,148 +60,65 @@ router.post ('/', uploader.single('thumbnail'), async (req, res) => {
     }
 });
 
-router.put ('/:pid', async (req, res) => {
-    const { pid } = req.params;
-    const { title, description, code, price, stock, category, thumbnail = [] } = req.body;
-    const filter = { _id: pid };
-    const updated = { title, description, code, price, stock, category, thumbnail };
-    const options = { new: true };
-
-    const process = await controller.update(filter, updated, options);
-
-    if (process) {
-        broadcastProductsUpdate();
-        res.status(200).send({ error: null, data: process });
-    } else {
-        res.status(404).send({ error: 'Producto no encontrado', data: [] });
-    }
-});
-
-router.delete ('/:pid', async (req, res) => {
-    const { pid } = req.params;
-    const filter = { _id: pid };
-    const options = { };
-
-    const process = await controller.delete(filter, options);
-
-    if (process) {
-        broadcastProductsUpdate();
-        res.status(200).send({ error: null, data: process });
-    } else {
-        res.status(404).send({ error: 'Producto no encontrado', data: [] });
-    }
-});
-
-
-// GET /api/products: Retorna todos los productos
-// router.get('/', async (req, res) => {
-//     const limit = parseInt(req.query.limit);
-//     try {
-//         let products = await productManager.getProducts();
-//         if (limit) {
-//             return res.json(products.slice(0, parseInt(limit)));
-//         }
-//         res.json(products);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error al obtener los productos' });
-//     }
-// });
-
-// GET /api/products/:pid: Retorna un producto según su id
-// router.get('/:pid', async (req, res) => {
-//     const pid = parseInt(req.params.pid);
-//     try {
-//         const product = await productManager.getProductById(pid);
-//     if (!product) {
-//         return res.status(404).json({ error: 'Producto no encontrado' });
-//     }
-//     res.json(product);
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error al obtener el producto' });
-//     }
-// });
-
-// POST /api/products: Crea un nuevo producto
-// router.post('/', async (req, res) => {
-//     const { title, description, code, price, stock, category, thumbnail = [] } = req.body;
-
-//     // Validamos que los datos requeridos estén presentes
-//     if (!title || !description || !code || !price || !stock || !category) {
-//         return res.status(400).json({ error: 'Faltan campos requeridos' });
-//     }
-
-//     const newProduct = await productManager.addProduct({
-//         title,
-//         description,
-//         code,
-//         price,
-//         status: true, // Valor por defecto
-//         stock,
-//         category,
-//         thumbnail
-//     });
-//     // Emitir actualización a los clientes conectados al agregar un producto
-//     broadcastProductsUpdate();
-//     res.status(201).json({ message: 'Producto agregado correctamente', newProduct });
-// });
-
 // PUT /api/products/:pid: Actualiza un producto según su id
-// router.put('/:pid', (req, res) => {
-//     const pid = parseInt(req.params.pid);
-//     const { title, description, code, price, status, stock, category, thumbnail } = req.body;
+router.put('/:pid', async (req, res) => {
+    try {
+        const { pid } = req.params;
+        const updateFields = req.body;
+        
+        // Verificamos si el producto existe
+        const existingProduct = await productModel.findById(pid);
+        if (!existingProduct) {
+            return res.status(404).send({ error: 'Producto no encontrado', data: [] });
+        }
 
-//     const productManager = new ProductManager();
-//     productManager.init();
+        // Filtramos solo los campos que vienen en el body
+        const updated = {};
+        
+        // Solo incluimos los campos que existen en el body
+        const allowedFields = ['title', 'description', 'code', 'price', 'stock', 'category', 'thumbnail'];
+        for (const field of allowedFields) {
+            if (field in updateFields) {
+                updated[field] = updateFields[field];
+            }
+        }
 
-//     const product = productManager.getProductById(pid);
+        const updatedProduct = await productModel.findByIdAndUpdate(
+            pid,
+            updated,
+            { new: true }
+        );
 
-//     if (product === -1) {
-//         return res.status(404).json({ error: 'Producto no encontrado' });
-//     }
+        if (updatedProduct) {
+            broadcastProductsUpdate();
+            res.status(200).send({ error: null, data: updatedProduct });
+        } else {
+            res.status(404).send({ error: 'Error al actualizar el producto', data: [] });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send({ error: error.message, data: [] });
+    }
+});
 
-//     // se acutalizan los datos presentes en el body. Si un campo no está presente, se mantiene el valor actual
-//     const updatedProduct = {
-//         ...product,  // Mantenemos los datos originales
-//         title: title || product.title,
-//         description: description || product.description,
-//         code: code || product.code,
-//         status: status !== undefined ? status : product.status,
-//         price: price || product.price,
-//         stock: stock || product.stock,
-//         category: category || product.category,
-//         thumbnail: thumbnail || product.thumbnail
-//     };
-
-//     productManager.updateProduct(pid, updatedProduct);
-
-//     res.status(200).json({ message: 'Producto actualizado correctamente', updatedProduct });
-//     }  
-// );
-    
 // DELETE /api/products/:pid: Elimina un producto según su id
-// router.delete("/:pid", async (req, res) => {
-//   const pid = parseInt(req.params.pid);
+router.delete('/:pid', async (req, res) => {
+    try {
+        const { pid } = req.params;  // Cambiado de req.query a req.params
 
-//   const productManager = new ProductManager();
-//   productManager.init();
+        // Verificamos si el producto existe y lo eliminamos
+        const deletedProduct = await productModel.findByIdAndDelete(pid);
 
-//   try {
-//     const deletedProduct = await productManager.deleteProduct(pid);
-//     // Emitir actualización a los clientes conectados al eliminar un producto
-//     broadcastProductsUpdate(); 
-//     res.json({
-//       message: `Producto con id ${pid} eliminado correctamente`,
-//       product: deletedProduct,
-//     });
-//   } catch (error) {
-//     if (error.message === "Producto no encontrado") {
-//       return res.status(404).json({ error: "Producto no encontrado" });
-//     } else {
-//       res.status(500).json({ error: "Error al eliminar el producto" });
-//     }
-//   }
-// });
+        if (deletedProduct) {
+            broadcastProductsUpdate();
+            res.status(200).send({ error: null, data: deletedProduct, message: 'Producto eliminado correctamente' });
+        } else {
+            res.status(404).send({ error: 'Producto no encontrado', data: [] });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send({ error: error.message, data: [] });
+    }
+});
 
 export default router;
-
-        
